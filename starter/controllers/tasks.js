@@ -52,7 +52,7 @@ const updateTask = async (req, res) => {
     const task = await Task.findOneAndUpdate({ _id: taskID }, req.body, {
       new: true,
       runValidators: true,
-    });
+    }); // so in testing we get the updated task back not the old one
 
     if (!task) {
       return res.status(404).json({ msg: `No task with id : ${taskID}` });
