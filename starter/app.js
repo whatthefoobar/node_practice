@@ -1,25 +1,24 @@
 const express = require('express');
 const app = express();
-const port = 3000;
 const tasks = require('./routes/tasks');
 const connectDB = require('./db/connect');
 require('dotenv').config();
 const notFound = require('./middleware/not-found');
+const errorHandlerMiddleware = require('./middleware/error-handler');
 
-//middleware
-app.use(express.static('./public')); // to serve our static files
+// middleware
+
+app.use(express.static('./public'));
 app.use(express.json()); // to access req.body
 
-app.use(notFound);
+// mw for routes
 
-// routes
 app.use('/api/v1/tasks', tasks);
 
-//app.get('/api/v1/tasks') - get all the tasks
-//app.post('/api/v1/tasks') - create a new task
-//app.get('/api/v1/tasks/:id') - get a single task
-//app.patch('/api/v1/tasks/:id') - update a task
-//app.patch('/api/v1/tasks/:id') - update a task
+//f to access custom mw
+app.use(notFound);
+app.use(errorHandlerMiddleware);
+const port = process.env.PORT || 3000;
 
 const start = async () => {
   try {
@@ -31,4 +30,5 @@ const start = async () => {
     console.log(error);
   }
 };
+
 start();
