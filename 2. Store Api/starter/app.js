@@ -1,15 +1,17 @@
-require('dotenv').config();
-const connectDB = require('./db/connect');
-const productsRouter = require('./routes/products');
-require('express-async-errors');
-
-const express = require('express');
+// require('dotenv').config();
+import 'dotenv/config';
+// dotenv.config();
+import connectDB from './db/connect.js';
+import productsRouter from './routes/products.js';
+const port = process.env.PORT || 3000;
+import 'express-async-errors';
+import express, { json } from 'express';
 const app = express();
 
-const notFoundMiddleware = require('./middleware/not-found');
-const errorMiddleware = require('./middleware/error-handler');
+import notFoundMiddleware from './middleware/not-found.js';
+import errorMiddleware from './middleware/error-handler.js';
 
-app.use(express.json());
+app.use(json());
 
 //routes
 app.get('/', (req, res) => {
@@ -21,8 +23,6 @@ app.use('/api/v1/products', productsRouter);
 //  products route
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);
-
-const port = process.env.PORT || 3000;
 
 const start = async () => {
   try {
@@ -36,4 +36,4 @@ const start = async () => {
 
 start();
 
-console.log('04 Store API');
+console.log('04 Store API Test');
