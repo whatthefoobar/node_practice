@@ -6,13 +6,19 @@ const getAllProductsStatic = async (req, res) => {
 };
 
 const getAllProducts = async (req, res) => {
-  const { featured } = req.query;
-  const QueryObject = {};
+  const { featured, company } = req.query;
+  //this way if any query params are passed that are not featured in our object we get sent back the whole object unfiltered
+  const queryObject = {};
+
   if (featured) {
-    QueryObject.featured = featured === 'true' ? true : false;
+    queryObject.featured = featured === 'true' ? true : false;
   }
-  console.log(QueryObject);
-  const products = await Product.find(QueryObject);
+  if (company) {
+    queryObject.company = company;
+  }
+
+  console.log(queryObject);
+  const products = await Product.find(queryObject);
   res.status(200).json({ products, nbHits: products.length });
 };
 
