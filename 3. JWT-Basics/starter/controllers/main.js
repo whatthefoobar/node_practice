@@ -3,9 +3,23 @@
 //send back to frontend
 //setup authentication so only the request with JWT can access the dashboard
 
+const jwt = require('jsonwebtoken');
+const CustomApiError = require('../errors/custom-error');
+
 const login = async (req, res) => {
-  console.log(req.body);
-  res.send('Fake Login/Register/Signup Route');
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+    throw new CustomApiError('Please provide username and password', 400);
+  }
+  // just for demo, normally provided by mongo db
+  const id = new Date().getDate();
+  //just for demo, in production use long complex and unguessable string for JWT_SECRET to sign our tokens
+  // keep payload small for best ux
+  const token = jwt.sign({ id, username }, process.env.JWT_SECRET, {
+    expiresIn: '30d',
+  }); // no confidential data
+  res.status(200).json({ msg: 'user created', token });
 };
 
 const dashboard = async (req, res) => {
