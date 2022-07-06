@@ -30,13 +30,19 @@ const dashboard = async (req, res) => {
   }
 
   const token = authHeader.split(' ')[1];
-  console.log(token);
-  const luckyNo = Math.floor(Math.random() * 100);
 
-  res.status(200).json({
-    msg: `Hello, John`,
-    secret: `Here is your authorized data, your lucky number is ${luckyNo}`,
-  });
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    //console.log(decoded); //{ id: 6, username: 'john', iat: 1657120224, exp: 1659712224 }
+
+    const luckyNo = Math.floor(Math.random() * 100);
+    res.status(200).json({
+      msg: `Hello, ${decoded.username}`,
+      secret: `Here is your authorized data, your lucky number is ${luckyNo}`,
+    });
+  } catch (error) {
+    throw new CustomApiError('Not authorized to access this route', 400);
+  }
 };
 
 module.exports = {
