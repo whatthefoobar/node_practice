@@ -10,7 +10,7 @@ const errorHandlerMiddleware = require('./middleware/error-handler');
 
 // middleware
 app.use(express.static('./public'));
-app.use(express.json()); // we're gonna have a post req and we need access to req.body
+app.use(express.json()); // gives us access to the req.body for our POST request
 
 app.use('/api/v1', mainRouter);
 
